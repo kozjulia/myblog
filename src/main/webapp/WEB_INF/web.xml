@@ -21,7 +21,7 @@
         <!-- Настройка Spring-контекста и Java-конфигурации -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>ru.yandex.practicum.WebConfiguration</param-value>
+            <param-value>ru.practicum.spring.mvc.configuration.WebConfiguration</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
         <multipart-config>
