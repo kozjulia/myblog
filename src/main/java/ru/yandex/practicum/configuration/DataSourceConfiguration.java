@@ -1,4 +1,4 @@
-package ru.practicum.spring.mvc.configuration;
+package ru.yandex.practicum.configuration;
 
 import org.h2.Driver;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,12 +18,13 @@ public class DataSourceConfiguration {
 
     @Bean
     public DataSource dataSource(
-            @Value("${spring.datasource.url}") String url,
-            @Value("${spring.datasource.username}") String username,
-            @Value("${spring.datasource.password}") String password
+            @Value("${datasource.url}") String url,
+            @Value("${datasource.driver}") String driver,
+            @Value("${datasource.username}") String username,
+            @Value("${datasource.password}") String password
     ) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Driver.class.getName());
+        dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
@@ -42,6 +43,7 @@ public class DataSourceConfiguration {
 
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("schema.sql"));
+        populator.addScript(new ClassPathResource("data.sql"));
         populator.execute(dataSource);
     }
 }

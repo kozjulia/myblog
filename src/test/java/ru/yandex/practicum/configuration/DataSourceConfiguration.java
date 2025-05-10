@@ -1,4 +1,4 @@
-package ru.practicum.spring.mvc.configuration;
+package ru.yandex.practicum.configuration;
 
 import org.h2.Driver;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +28,7 @@ public class DataSourceConfiguration {
 
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("test-schema.sql"));
+        populator.addScript(new ClassPathResource("data.sql"));
         populator.execute(dataSource);
 
         return dataSource;

@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS posts(
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(256) NOT NULL,
+    image_path VARCHAR(512) NOT NULL,
+    text VARCHAR NOT NULL,
+    likes_count BIGINT
+);
+
+CREATE TABLE IF NOT EXISTS comments(
+    id BIGSERIAL PRIMARY KEY,
+    post_id BIGSERIAL NOT NULL,
+    description VARCHAR(256) NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
+);

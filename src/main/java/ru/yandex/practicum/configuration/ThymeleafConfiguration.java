@@ -1,4 +1,4 @@
-package ru.practicum.spring.mvc.configuration;
+package ru.yandex.practicum.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

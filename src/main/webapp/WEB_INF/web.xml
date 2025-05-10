@@ -6,13 +6,6 @@
 
     <display-name>Приложение-блог, запускаемое в контейнере сервлетов</display-name>
 
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>
-            org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-        </param-value>
-    </context-param>
-
     <servlet>
         <!-- Имя и класс основного сервлета приложения-->
         <servlet-name>dispatcher</servlet-name>
@@ -20,8 +13,12 @@
 
         <!-- Настройка Spring-контекста и Java-конфигурации -->
         <init-param>
+            <param-name>contextClass</param-name>
+            <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+        </init-param>
+        <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>ru.practicum.spring.mvc.configuration.WebConfiguration</param-value>
+            <param-value>ru.yandex.practicum.configuration.WebConfiguration</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
         <multipart-config>
