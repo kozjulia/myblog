@@ -1,41 +1,24 @@
 package ru.yandex.practicum.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import ru.yandex.practicum.dto.EditPostDto;
 import ru.yandex.practicum.dto.PostDto;
-import ru.yandex.practicum.repository.PostRepository;
-import ru.yandex.practicum.exception.NotFoundException;
-import ru.yandex.practicum.mapper.PostMapper;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class PostService {
+public interface PostService {
 
-    private final PostRepository postRepository;
-    private final PostMapper postMapper;
+    List<PostDto> findPosts(String search, Integer pageNumber, Integer pageSize);
 
-    public List<PostDto> findPosts(String search, Integer pageNumber, Integer pageSize) {
-        Integer offset = (pageNumber - 1) * pageSize;
+    PostDto getPostById(Long postId);
 
-        return postRepository.findPosts(search, pageSize, offset).stream()
-                .map(postMapper::toPostDto)
-                .toList();
-    }
+    EditPostDto getEditPostDtoById(Long postId);
 
-    public PostDto getPostById(Long id) {
+    Long addPost(String title, String text, MultipartFile image, String tags);
 
-        return postRepository.getPostById(id)
-                .map(postMapper::toPostDto)
-                .orElseThrow(() -> new NotFoundException("Поста с id = " + id + "не существует"));
-    }
+    void likePostById(Long postId, Boolean like);
 
-    public void addPost(PostDto postDto) {
-        postRepository.save(postMapper.toPost(postDto));
-    }
+    void editPost(Long postId, String title, String text, MultipartFile image, String tags);
 
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
-    }
+    void deletePost(Long postId);
 }

@@ -1,35 +1,47 @@
 package ru.yandex.practicum.mapper;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
+import ru.yandex.practicum.dto.EditPostDto;
 import ru.yandex.practicum.dto.PostDto;
 import ru.yandex.practicum.model.Post;
 
-@Component
-@RequiredArgsConstructor
-public class PostMapper {
+import java.util.Arrays;
+import java.util.List;
 
-    private final CommentMapper commentMapper;
+import static java.util.Objects.nonNull;
 
-    public PostDto toPostDto(Post post) {
-        return new PostDto(
-                post.getId(),
-                post.getTitle(),
-                post.getImagePath(),
-                post.getText(),
-                post.getLikesCount(),
-                commentMapper.toCommentDtos(post.getComments())
-        );
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = CommentMapper.class)
+public interface PostMapper {
+
+    String EMPTY = "";
+
+    @Mapping(target = "textPreview", expression = "java(getTextPreview(post.getText()))")
+    @Mapping(target = "textParts", expression = "java(getTextParts(post.getText()))")
+    PostDto toPostDto(Post post);
+
+    @Mapping(target = "text", source = "postDto.textPreview")
+    @Mapping(target = "tagsAsText", expression = "java(getTagsAsText(postDto.getTags()))")
+    EditPostDto toEditPostDto(PostDto postDto);
+
+    Post toPost(PostDto postDto);
+
+    List<PostDto> toPostDtos(List<Post> posts);
+
+    @Named("getTextPreview")
+    default String getTextPreview(String text) {
+        return nonNull(text) ? text.split("\n")[0] : EMPTY;
     }
 
-    public Post toPost(PostDto postDto) {
-        Post post = new Post();
-        post.setId(postDto.id());
-        post.setTitle(postDto.title());
-        post.setImagePath(postDto.imagePath());
-        post.setText(postDto.textPreview());
-        post.setLikesCount(postDto.likesCount());
-        post.setComments(commentMapper.toComments(postDto.comments()));
-        return post;
+    @Named("getTextParts")
+    default List<String> getTextParts(String text) {
+        return Arrays.stream(text.split("\\n+")).toList();
+    }
+
+    @Named("getTagsAsText")
+    default String getTagsAsText(String[] tags) {
+        return nonNull(tags) ? String.join(",", tags) : EMPTY;
     }
 }
