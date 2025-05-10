@@ -1,39 +1,20 @@
 package ru.yandex.practicum.mapper;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import ru.yandex.practicum.dto.CommentDto;
 import ru.yandex.practicum.model.Comment;
 
 import java.util.List;
 
-@Component
-public class CommentMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface CommentMapper {
 
-    public CommentDto toCommentDto(Comment comment) {
-        return new CommentDto(
-                comment.getId(),
-                comment.getPostId(),
-                comment.getDescription()
-        );
-    }
+    CommentDto toCommentDto(Comment comment);
 
-    public List<CommentDto> toCommentDtos(List<Comment> comments) {
-        return comments.stream()
-                .map(this::toCommentDto)
-                .toList();
-    }
+    Comment toComment(CommentDto commentDto);
 
-    public Comment toComment(CommentDto commentDto) {
-        Comment comment = new Comment();
-        comment.setId(commentDto.id());
-        comment.setPostId(commentDto.postId());
-        comment.setDescription(commentDto.description());
-        return comment;
-    }
+    List<CommentDto> toCommentDtos(List<Comment> comments);
 
-    public List<Comment> toComments(List<CommentDto> comments) {
-        return comments.stream()
-                .map(this::toComment)
-                .toList();
-    }
+    List<Comment> toComments(List<CommentDto> comments);
 }

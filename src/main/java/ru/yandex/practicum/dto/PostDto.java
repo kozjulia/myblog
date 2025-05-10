@@ -8,5 +8,6 @@ public record PostDto(
         String imagePath,
         String textPreview,
         Long likesCount,
+        List<String> tags,
         List<CommentDto> comments) {
 }
