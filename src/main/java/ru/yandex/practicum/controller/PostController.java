@@ -164,7 +164,7 @@ public class PostController extends RedirectController {
      * @param postId Идентификатор поста
      * @return Редирект на "/posts"
      */
-    @PostMapping(value = "/{id}/delete", params = "_method=delete")
+    @PostMapping(value = "/{id}/delete")
     public String deletePost(@PathVariable("id") Long postId) {
         service.deletePost(postId);
 

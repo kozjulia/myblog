@@ -22,7 +22,7 @@ public interface PostMapper {
     @Mapping(target = "textParts", expression = "java(getTextParts(post.getText()))")
     PostDto toPostDto(Post post);
 
-    @Mapping(target = "text", source = "postDto.textPreview")
+    @Mapping(target = "text", expression = "java(getText(postDto.getTextParts()))")
     @Mapping(target = "tagsAsText", expression = "java(getTagsAsText(postDto.getTags()))")
     EditPostDto toEditPostDto(PostDto postDto);
 
@@ -38,6 +38,11 @@ public interface PostMapper {
     @Named("getTextParts")
     default List<String> getTextParts(String text) {
         return Arrays.stream(text.split("\\n+")).toList();
+    }
+
+    @Named("getText")
+    default String getText(List<String> textParts) {
+        return nonNull(textParts) ? String.join(",", textParts) : EMPTY;
     }
 
     @Named("getTagsAsText")

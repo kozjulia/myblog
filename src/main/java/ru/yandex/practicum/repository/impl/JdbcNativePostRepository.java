@@ -80,7 +80,7 @@ public class JdbcNativePostRepository implements PostRepository {
             ps.setArray(5, connection.createArrayOf("VARCHAR", post.getTags()));
             return ps;
         }, keyHolder);
-        return (Long) keyHolder.getKey();
+        return (Long) keyHolder.getKeyList().getFirst().get("id");
     }
 
     @Override

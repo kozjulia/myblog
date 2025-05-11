@@ -58,7 +58,7 @@ public class CommentController extends RedirectController {
      * @param commentId Идентификатор комментария
      * @return Редирект на "/posts/{id}"
      */
-    @PostMapping(value = "/{commentId}/delete", params = "_method=delete")
+    @PostMapping(value = "/{commentId}/delete")
     public String delete(
             @PathVariable("id") Long postId,
             @PathVariable("commentId") Long commentId
