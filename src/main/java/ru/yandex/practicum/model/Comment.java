@@ -15,5 +15,5 @@ public class Comment {
     @Id
     private Long id;
     private Long postId;
-    private String description;
+    private String text;
 }
