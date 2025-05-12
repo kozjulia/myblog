@@ -96,10 +96,11 @@ public class JdbcNativePostRepository implements PostRepository {
     @Override
     public void update(Post post) {
         jdbcTemplate.update(
-                "UPDATE posts SET title = ?, image_path = ?, text = ? WHERE id = ?",
+                "UPDATE posts SET title = ?, image_path = ?, text = ?, tags = string_to_array(?,',') WHERE id = ?",
                 post.getTitle(),
                 post.getImagePath(),
                 post.getText(),
+                String.join(",", post.getTags()),
                 post.getId()
         );
     }

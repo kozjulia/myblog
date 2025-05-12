@@ -17,6 +17,7 @@ import static java.util.Objects.nonNull;
 public interface PostMapper {
 
     String EMPTY = "";
+    String NEW_LINE = "\n";
 
     @Mapping(target = "textPreview", expression = "java(getTextPreview(post.getText()))")
     @Mapping(target = "textParts", expression = "java(getTextParts(post.getText()))")
@@ -26,23 +27,21 @@ public interface PostMapper {
     @Mapping(target = "tagsAsText", expression = "java(getTagsAsText(postDto.getTags()))")
     EditPostDto toEditPostDto(PostDto postDto);
 
-    Post toPost(PostDto postDto);
-
     List<PostDto> toPostDtos(List<Post> posts);
 
     @Named("getTextPreview")
     default String getTextPreview(String text) {
-        return nonNull(text) ? text.split("\n")[0] : EMPTY;
+        return nonNull(text) ? text.split(NEW_LINE)[0] : EMPTY;
     }
 
     @Named("getTextParts")
     default List<String> getTextParts(String text) {
-        return Arrays.stream(text.split("\\n+")).toList();
+        return Arrays.stream(text.split(NEW_LINE)).toList();
     }
 
     @Named("getText")
     default String getText(List<String> textParts) {
-        return nonNull(textParts) ? String.join(",", textParts) : EMPTY;
+        return nonNull(textParts) ? String.join(NEW_LINE, textParts) : EMPTY;
     }
 
     @Named("getTagsAsText")

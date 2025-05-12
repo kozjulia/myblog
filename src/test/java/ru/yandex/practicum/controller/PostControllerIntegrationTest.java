@@ -1,66 +1,58 @@
 package ru.yandex.practicum.controller;
 
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.web.WebAppConfiguration;
-import ru.yandex.practicum.WebConfiguration;
-import ru.yandex.practicum.configuration.DataSourceConfiguration;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.yandex.practicum.BaseIntegrationTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@SpringJUnitConfig(classes = {DataSourceConfiguration.class, WebConfiguration.class})
-@WebAppConfiguration
-@TestPropertySource(locations = "classpath:test-application.properties")
-class PostControllerIntegrationTest {
-
-  /*  @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
-        // Очистка и заполнение тестовых данных в базе
-        jdbcTemplate.execute("DELETE FROM users");
-        jdbcTemplate.execute("INSERT INTO users (id, first_name, last_name, age, active) VALUES (1, 'Иван', 'Иванов', 30, true)");
-        jdbcTemplate.execute("INSERT INTO users (id, first_name, last_name, age, active) VALUES (2, 'Мария', 'Сидорова', 25, false)");
-    }
+class PostControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    void getUsers_shouldReturnHtmlWithUsers() throws Exception {
-        mockMvc.perform(get("/users"))
+    @SneakyThrows
+    void findPosts_shouldReturnHtmlWithPostsTest() {
+        mockMvc.perform(get("/posts")
+                        .param("search", "tag1"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(view().name("users"))
-                .andExpect(model().attributeExists("users"))
-                .andExpect(xpath("//table/tbody/tr").nodeCount(2))
-                .andExpect(xpath("//table/tbody/tr[1]/td[2]").string("Иван"));
+                .andExpect(view().name("posts"))
+                .andExpect(model().attributeExists("posts", "search", "paging"));
     }
 
     @Test
-    void save_shouldAddUserToDatabaseAndRedirect() throws Exception {
-        mockMvc.perform(post("/users")
-                        .param("id", "4")
-                        .param("firstName", "Анна")
-                        .param("lastName", "Смирнова")
-                        .param("age", "28")
-                        .param("active", "true"))
+    @SneakyThrows
+    void addPost_shouldAddPostToDatabaseAndRedirectTest() {
+        MockMultipartFile image = new MockMultipartFile(
+                "image", "test.jpg", "image/jpeg", "IMAGE".getBytes());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/posts")
+                        .file(image)
+                        .param("title", "Новый заголовок")
+                        .param("text", "Содержание поста")
+                        .param("tags", "tag"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users"));
+                .andExpect(redirectedUrl("/posts/4"));
+
+        JdbcTemplate jdbcTemplate = webContext.getBean(JdbcTemplate.class);
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM posts WHERE title = ?", Integer.class, "Новый заголовок");
+
+        assertEquals(1, count);
     }
 
     @Test
-    void delete_shouldRemoveUserFromDatabaseAndRedirect() throws Exception {
-        mockMvc.perform(post("/users/1")
-                        .param("_method", "delete"))
+    @SneakyThrows
+    void deletePost_shouldRemovePostFromDatabaseAndRedirectTest() {
+        mockMvc.perform(post("/posts/1/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users"));
-    } */
+                .andExpect(redirectedUrl("/posts"));
+    }
 }
