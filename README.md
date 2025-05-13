@@ -26,8 +26,8 @@ _______
 ```maven
 mvn clean package
 ```
-   В директории target проекта появится war-архив myblog.war
-6. Архив нужно переместить в директорию webapps Tomcat'а.
-7. Затем перейдите [на эту страницу](http://localhost:8080/manager/html). 
-8. Выбрать приложение /my-blog. 
-9. Успех!
+   В директории target проекта появится war-архив myblog.war  
+6. Архив нужно переместить в директорию webapps Tomcat'а.  
+7. Затем перейдите [на эту страницу](http://localhost:8080/manager/html).   
+8. Выбрать приложение /my-blog.   
+9. Успех!  
