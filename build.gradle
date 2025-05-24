@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'ru.yandex.practicum'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 
 java {
     toolchain {
@@ -22,8 +22,12 @@ configurations {
     }
 }
 
-wrapper {
-    gradleVersion = '8.13'
+springBoot {
+    buildInfo()
+}
+
+bootJar {
+    launchScript()
 }
 
 apply from: 'repositories.gradle'
@@ -52,4 +56,8 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+wrapper {
+    gradleVersion = '8.13'
 }
