@@ -43,18 +43,18 @@
 </head>
 
 <body>
-    <a href="/my-blog/posts" style="float:right;">
+    <a href="/posts" style="float:right;">
         <b>НА ГЛАВНУЮ &cudarrr;</b>
     </a>
     <table style="width:50%;margin-left:auto;margin-right:auto;">
         <tr>
             <td>
-                <form method="GET" th:action="${'/my-blog/posts/'+post.id+'/edit'}">
+                <form method="GET" th:action="${'/posts/'+post.id+'/edit'}">
                     <button style="float:right;">РЕДАКТИРОВАТЬ ПОСТ</button>
                 </form>
             </td>
             <td>
-                <form method="POST" th:action="${'/my-blog/posts/'+post.id+'/delete'}">
+                <form method="POST" th:action="${'/posts/'+post.id+'/delete'}">
                     <button style="float:right;">УДАЛИТЬ ПОСТ</button>
                 </form>
             </td>
@@ -63,10 +63,10 @@
             <td>
                 <h2 th:text="${post.title}"></h2>
                 <p>
-                    <img height="300" th:src="${'http://localhost:8080/my-blog/images/'+post.id}">
+                    <img height="300" th:src="${'http://localhost:8085/images/'+post.id}">
                 </p>
                 <p>
-                    <form th:action="${'/my-blog/posts/'+post.id+'/like'}" method="post">
+                    <form th:action="${'/posts/'+post.id+'/like'}" method="post">
                         <button name="like" value="true">&#x1F44D;</button>
                         <span th:text="${'&#x1F44D; '+post.likesCount}"></span>
                         <button name="like" value="false">&#128078;</button>
@@ -89,20 +89,20 @@
         </tr>
         <tr th:each="comment : ${post.comments}">
             <td style="border-left:thin solid grey;">
-                <form method="POST" th:action="${'/my-blog/posts/'+post.id+'/comments/'+comment.id}">
+                <form method="POST" th:action="${'/posts/'+post.id+'/comments/'+comment.id}">
                     <span th:id="${'comment'+comment.id}" th:text="${comment.text}"></span>
                     <button th:id="${comment.id}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
                 </form>
             </td>
             <td>
-                <form method="POST" th:action="${'/my-blog/posts/'+post.id+'/comments/'+comment.id+'/delete'}">
+                <form method="POST" th:action="${'/posts/'+post.id+'/comments/'+comment.id+'/delete'}">
                     <button style="float:right;">&#10007;</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-                <form id="addCommentForm" th:action="${'/my-blog/posts/'+post.id+'/comments'}" method="post">
+                <form id="addCommentForm" th:action="${'/posts/'+post.id+'/comments'}" method="post">
                     <button id="addCommentButton" style="float:right;" onclick="addComment()">Добавить комментарий</button>
                 </form>
             </td>

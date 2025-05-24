@@ -2,7 +2,6 @@ package ru.yandex.practicum.controller;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.yandex.practicum.BaseIntegrationTest;
@@ -41,7 +40,6 @@ class PostControllerIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/posts/4"));
 
-        JdbcTemplate jdbcTemplate = webContext.getBean(JdbcTemplate.class);
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM posts WHERE title = ?", Integer.class, "Новый заголовок");
 

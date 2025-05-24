@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.yandex.practicum.TestConstants.POST_ID;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.BaseIntegrationTest;
 
 public class CommentControllerIntegrationTest extends BaseIntegrationTest {
@@ -23,7 +22,6 @@ public class CommentControllerIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/posts/1"));
 
-        JdbcTemplate jdbcTemplate = webContext.getBean(JdbcTemplate.class);
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM comments WHERE post_id = ?", Integer.class, POST_ID);
 
