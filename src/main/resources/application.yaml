@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myblog
+    driver-class-name: org.postgresql.Driver
+    username: sa
+    password: sa
+
+server:
+  port: 8085
